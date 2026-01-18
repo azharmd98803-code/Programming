@@ -24,7 +24,7 @@ def pause():
 def load_dataset():
     global data
     try:
-        data = pd.read_csv("Pythonproject/student.csv")
+        data = pd.read_csv("student.csv")
         print("\nDataset Loaded Successfully!")
     except FileNotFoundError:
         print("\nError: student.csv not found in Pythonproject folder!")
