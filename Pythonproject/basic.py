@@ -1,140 +1,106 @@
 import pandas as pd
+import streamlit as st
 import matplotlib.pyplot as plt
 import seaborn as sns
-import sys
 
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error, r2_score
 
-# -------------------
-# Global variables
-# -------------------
-data = None
-model = None
+st.set_page_config(page_title="Student Performance Analytics", layout="centered")
 
-
-def pause():
-    input("\nPress Enter to continue...")
-
+st.title("🎓 Student Performance Analytics System")
 
 # -------------------
 # Load Dataset
 # -------------------
-def load_dataset():
-    global data
-    try:
-        data = pd.read_csv("student.csv")
-        print("\nDataset Loaded Successfully!")
-    except FileNotFoundError:
-        print("\nError: student.csv not found in Pythonproject folder!")
-    pause()
+@st.cache_data
+def load_data():
+    return pd.read_csv("student.csv")
 
+
+try:
+    data = load_data()
+    st.success("Dataset Loaded Successfully!")
+except:
+    st.error("student.csv not found! Keep it in same folder as app.py")
+    st.stop()
+
+# -------------------
+# Sidebar Menu
+# -------------------
+menu = st.sidebar.selectbox(
+    "Select Option",
+    [
+        "Dataset Info",
+        "Clean Data",
+        "Statistical Summary",
+        "Visualizations",
+        "Train Model",
+        "Predict Marks",
+    ],
+)
 
 # -------------------
 # Dataset Info
 # -------------------
-def dataset_info():
-    if data is None:
-        print("\nLoad dataset first!")
-        pause()
-        return
+if menu == "Dataset Info":
+    st.subheader("Dataset Preview")
+    st.write(data.head())
 
-    print("\nDataset Info:")
-    print(data.info())
-    print("\nFirst 5 Rows:")
-    print(data.head())
-    pause()
-
+    st.subheader("Dataset Info")
+    st.text(str(data.info()))
 
 # -------------------
 # Clean Data
 # -------------------
-def clean_data():
-    global data
-    if data is None:
-        print("\nLoad dataset first!")
-        pause()
-        return
+elif menu == "Clean Data":
+    st.subheader("Before Cleaning")
+    st.write(data)
 
-    print("\nDATA BEFORE CLEANING:")
-    print(data)
+    clean_data = data.dropna()
 
-    data.dropna(inplace=True)
-
-    print("\nDATA AFTER CLEANING:")
-    print(data)
-    print("\nData cleaned successfully!")
-    pause()
-
+    st.subheader("After Cleaning")
+    st.write(clean_data)
 
 # -------------------
 # Statistical Summary
 # -------------------
-def statistical_summary():
-    if data is None:
-        print("\nLoad dataset first!")
-        pause()
-        return
-
-    print("\nStatistical Summary:")
-    print(data.describe())
-    pause()
-
+elif menu == "Statistical Summary":
+    st.subheader("Statistical Summary")
+    st.write(data.describe())
 
 # -------------------
 # Visualizations
 # -------------------
-def visualization_menu():
-    if data is None:
-        print("\nLoad dataset first!")
-        pause()
-        return
+elif menu == "Visualizations":
+    st.subheader("Visualizations")
 
-    while True:
-        print("\nVISUALIZATION MENU")
-        print("1. Study Hours vs Marks")
-        print("2. Attendance vs Marks")
-        print("3. Correlation Heatmap")
-        print("4. Back")
+    graph = st.selectbox(
+        "Choose Graph",
+        ["Study Hours vs Marks", "Attendance vs Marks", "Correlation Heatmap"],
+    )
 
-        choice = input("Enter choice: ")
+    if graph == "Study Hours vs Marks":
+        fig, ax = plt.subplots()
+        sns.scatterplot(x="study_hours", y="marks", data=data, ax=ax)
+        st.pyplot(fig)
 
-        if choice == "1":
-            sns.scatterplot(x="study_hours", y="marks", data=data)
-            plt.title("Study Hours vs Marks")
-            plt.show()
-            pause()
+    elif graph == "Attendance vs Marks":
+        fig, ax = plt.subplots()
+        sns.scatterplot(x="attendance", y="marks", data=data, ax=ax)
+        st.pyplot(fig)
 
-        elif choice == "2":
-            sns.scatterplot(x="attendance", y="marks", data=data)
-            plt.title("Attendance vs Marks")
-            plt.show()
-            pause()
-
-        elif choice == "3":
-            sns.heatmap(data.corr(numeric_only=True), annot=True, cmap="coolwarm")
-            plt.title("Correlation Heatmap")
-            plt.show()
-            pause()
-
-        elif choice == "4":
-            break
-        else:
-            print("Invalid choice!")
-            pause()
-
+    elif graph == "Correlation Heatmap":
+        fig, ax = plt.subplots()
+        sns.heatmap(data.corr(numeric_only=True), annot=True, ax=ax)
+        st.pyplot(fig)
 
 # -------------------
-# Train ML Model
+# Train Model
 # -------------------
-def train_model():
-    global model
-
-    if data is None:
-        print("\nLoad dataset first!")
-        pause()
-        return
+elif menu == "Train Model":
+    st.subheader("Train ML Model")
 
     X = data[["study_hours", "attendance", "previous_score"]]
     y = data["marks"]
@@ -146,84 +112,35 @@ def train_model():
     model = LinearRegression()
     model.fit(X_train, y_train)
 
-    predictions = model.predict(X_test)
+    preds = model.predict(X_test)
 
-    print("\nModel Trained Successfully!")
-    print("MAE:", mean_absolute_error(y_test, predictions))
-    print("R2 Score:", r2_score(y_test, predictions))
-    pause()
+    st.success("Model Trained Successfully!")
+    st.write("MAE:", mean_absolute_error(y_test, preds))
+    st.write("R2 Score:", r2_score(y_test, preds))
 
-
-# -------------------
-# Predict Student Score
-# -------------------
-def predict_score():
-    if model is None:
-        print("\nTrain model first!")
-        pause()
-        return
-
-    try:
-        study_hours = float(input("Enter Study Hours: "))
-        attendance = float(input("Enter Attendance %: "))
-        previous_score = float(input("Enter Previous Score: "))
-
-        input_data = pd.DataFrame(
-            [[study_hours, attendance, previous_score]],
-            columns=["study_hours", "attendance", "previous_score"]
-        )
-
-        prediction = model.predict(input_data)
-        print(f"\nPredicted Student Score: {prediction[0]:.2f}")
-
-    except ValueError:
-        print("\nInvalid input! Enter numeric values only.")
-
-    pause()
-
+    st.session_state["model"] = model
 
 # -------------------
-# Main Menu
+# Prediction
 # -------------------
-def main_menu():
-    while True:
-        print("\n===================================")
-        print("STUDENT PERFORMANCE ANALYTICS SYSTEM")
-        print("===================================")
-        print("1. Load Dataset")
-        print("2. Dataset Info")
-        print("3. Clean Data")
-        print("4. Statistical Summary")
-        print("5. Visualizations")
-        print("6. Train ML Model")
-        print("7. Predict Student Score")
-        print("8. Exit")
+elif menu == "Predict Marks":
+    st.subheader("Predict Student Marks")
 
-        choice = input("Enter your choice: ")
+    if "model" not in st.session_state:
+        st.warning("Please train the model first!")
+    else:
+        study_hours = st.number_input("Study Hours", min_value=0.0)
+        attendance = st.number_input("Attendance %", min_value=0.0)
+        previous_score = st.number_input("Previous Score", min_value=0.0)
 
-        if choice == "1":
-            load_dataset()
-        elif choice == "2":
-            dataset_info()
-        elif choice == "3":
-            clean_data()
-        elif choice == "4":
-            statistical_summary()
-        elif choice == "5":
-            visualization_menu()
-        elif choice == "6":
-            train_model()
-        elif choice == "7":
-            predict_score()
-        elif choice == "8":
-            print("\nThank you 😊")
-            sys.exit()
-        else:
-            print("\nInvalid choice!")
-            pause()
+        if st.button("Predict"):
+            input_df = pd.DataFrame(
+                [[study_hours, attendance, previous_score]],
+                columns=["study_hours", "attendance", "previous_score"],
+            )
 
+            result = st.session_state["model"].predict(input_df)
+            st.success(f"Predicted Marks: {result[0]:.2f}")
 
-# -------------------
-# Run Program
-# -------------------
-main_menu()
+st.markdown("---")
+st.markdown("### ✅ Thank you for using the system 😊")
