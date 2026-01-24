@@ -8,11 +8,11 @@ class Fact {
         Scanner sc = new Scanner(System.in);
 
         System.out.print("Enter a number: ");
-        int n = sc.nextInt();
+          double n = sc.nextInt();
 
-        int fact = 1;
+        double fact = 1;
 
-        for (int i = 1; i <= n; i++) {
+        for (double i = 1; i <= n; i++) {
             fact = fact * i;
         }
 

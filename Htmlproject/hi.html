@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hey Ajju 😎</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      font-family: Arial, sans-serif;
+      transition: background 0.5s ease;
+    }
+
+    .box {
+      text-align: center;
+      background: white;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    button {
+      padding: 12px 25px;
+      font-size: 16px;
+      border: none;
+      border-radius: 25px;
+      background: #ff4d6d;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #e63950;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="box">
+    <h1 id="text">Feeling Bored? 😴</h1>
+    <p>Click the button, something fun will happen!</p>
+    <button onclick="changeMood()">Click Me 😁</button>
+  </div>
+
+  <script>
+    const messages = [
+      "Smile ra Ajju 😄",
+      "Go drink some water 💧",
+      "You are not boring 😎",
+      "Time to move your body 🏃",
+      "Call one friend 📞",
+      "Build something cool 💻🔥"
+    ];
+
+    const colors = [
+      "linear-gradient(135deg, #ff9a9e, #fad0c4)",
+      "linear-gradient(135deg, #a1c4fd, #c2e9fb)",
+      "linear-gradient(135deg, #fbc2eb, #a6c1ee)",
+      "linear-gradient(135deg, #fdcbf1, #e6dee9)",
+      "linear-gradient(135deg, #84fab0, #8fd3f4)"
+    ];
+
+    function changeMood() {
+      const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+      const randomColor = colors[Math.floor(Math.random() * colors.length)];
+
+      document.getElementById("text").innerText = randomMsg;
+      document.body.style.background = randomColor;
+    }
+  </script>
+
+</body>
+</html>

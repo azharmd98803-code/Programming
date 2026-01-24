@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Catch the Box - Ajju 😎</title>
+  <style>
+    body{
+      margin:0;
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      flex-direction:column;
+      background:linear-gradient(135deg,#1d2671,#c33764);
+      font-family:Arial, sans-serif;
+      color:white;
+      overflow:hidden;
+    }
+
+    h1{margin-bottom:10px;}
+
+    #score{
+      font-size:20px;
+      margin-bottom:20px;
+    }
+
+    #box{
+      width:60px;
+      height:60px;
+      background:yellow;
+      position:absolute;
+      border-radius:10px;
+      cursor:pointer;
+      transition:0.2s;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎯 Catch the Box!</h1>
+  <div id="score">Score: 0</div>
+
+  <div id="box"></div>
+
+  <script>
+    const box = document.getElementById("box");
+    const scoreText = document.getElementById("score");
+    let score = 0;
+
+    function moveBox(){
+      const x = Math.random() * (window.innerWidth - 60);
+      const y = Math.random() * (window.innerHeight - 60);
+      box.style.left = x + "px";
+      box.style.top = y + "px";
+    }
+
+    box.addEventListener("click", () => {
+      score++;
+      scoreText.innerText = "Score: " + score;
+      moveBox();
+    });
+
+    moveBox();
+  </script>
+
+</body>
+</html>

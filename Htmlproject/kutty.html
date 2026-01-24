@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>For Muskan 💖</title>
+<title>For Kutty 💖</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
 
@@ -47,7 +47,7 @@ body{
 
 /* text */
 #text{
-  min-height:95px;font-size:17px;
+  min-height:120px;font-size:17px;
   color:#ff2f68;
 }
 
@@ -59,7 +59,7 @@ body{
   animation:beat 1.5s infinite;
 }
 
-/* buttons initial layout */
+/* buttons */
 .btn-row{
   display:flex;
   justify-content:center;
@@ -99,10 +99,12 @@ body{
 
 <button id="startBtn" onclick="startFlow()">Click Me 💖</button>
 
-<div id="loading">Preparing something special for you Muskan<span id="dots"></span></div>
-<div id="intro">Hey Muskan… 💖</div>
+<div id="loading">Preparing something special for you Kutty<span id="dots"></span></div>
+<div id="intro">Hey Kutty… 💖</div>
 
-<audio id="bgMusic"><source src="music.mp3" type="audio/mpeg"></audio>
+<audio id="bgMusic">
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
 
 <div class="card" id="card">
   <img id="teddy" src="teddy-normal.gif">
@@ -116,6 +118,7 @@ body{
 </div>
 
 <script>
+const startBtn=document.getElementById("startBtn");
 const loading=document.getElementById("loading");
 const intro=document.getElementById("intro");
 const card=document.getElementById("card");
@@ -127,36 +130,37 @@ const btnRow=document.getElementById("btnRow");
 const teddy=document.getElementById("teddy");
 const music=document.getElementById("bgMusic");
 
-/* start */
+/* start — SLOWER FLOW */
 function startFlow(){
  music.play().catch(()=>{});
  startBtn.style.display="none";
  document.body.style.background="black";
  loading.style.display="block";
 
- setTimeout(()=>{loading.style.display="none";intro.style.display="block";},2000);
+ setTimeout(()=>{loading.style.display="none";intro.style.display="block";},3000);
+
  setTimeout(()=>{
    intro.style.display="none";
    document.body.style.background="linear-gradient(135deg,#ff9aa2,#ff6f91,#ffc1cc)";
    card.style.display="block";
    typeLine();
- },4000);
+ },6500);
 }
 
-/* typing */
+/* emotional typing */
 let lines=[
- "I made this only for you 🥺💗",
- "Because you are very special to me 💕",
- "Every smile of yours means everything to me 💖",
- "So my heart wants to ask you one thing 🫶"
+ "Kutty… I tried many times to stay strong without saying this 🥺",
+ "But my heart never stopped choosing you, every single day 💔❤️",
+ "Even when I smile outside, inside I only think about you 🤍",
+ "So today I can’t hide it anymore… I need to ask you this 🫶"
 ];
 let i=0,j=0;
 
 function typeLine(){
  if(i<lines.length){
   if(j<lines[i].length){
-   textDiv.innerHTML+=lines[i][j++];setTimeout(typeLine,40);
-  }else{textDiv.innerHTML+="<br>";i++;j=0;setTimeout(typeLine,500);}
+   textDiv.innerHTML+=lines[i][j++];setTimeout(typeLine,60);
+  }else{textDiv.innerHTML+="<br>";i++;j=0;setTimeout(typeLine,900);}
  }else{
   question.style.display="block";
   yesBtn.style.display=noBtn.style.display="inline-block";
@@ -168,8 +172,8 @@ let noCount=0;
 let msgs=[
  "Please think again naaa 🥺",
  "My teddy is crying now 💔",
- "Don’t break my heart, chipkali 🧸💞",
- "Remember our moments together 😭💖"
+ "Don’t break my heart, Kutty 🧸💞",
+ "Remember how much I care about you 😭💖"
 ];
 
 noBtn.addEventListener("click",()=>{
@@ -183,18 +187,15 @@ noBtn.addEventListener("click",()=>{
  }
 });
 
-/* FINAL MODE */
+/* FINAL MODE — FIXED ALIGNMENT */
 function finalNoMode(){
 
-  /* center YES */
   btnRow.style.justifyContent="center";
-  yesBtn.style.margin="0 auto";
+  yesBtn.style.transform="scale(1.2)";
+  yesBtn.style.boxShadow="0 0 20px rgba(255,77,109,0.9)";
 
-  /* free NO from layout */
-  const rect = noBtn.getBoundingClientRect();
-  noBtn.style.position="fixed";
-  noBtn.style.left = rect.left+"px";
-  noBtn.style.top  = rect.top+"px";
+  noBtn.style.position="fixed";  // remove from layout
+  noBtn.style.zIndex="100";
 
   noBtn.addEventListener("mouseover",()=>{
     const maxX = window.innerWidth - noBtn.offsetWidth - 10;
@@ -202,6 +203,10 @@ function finalNoMode(){
 
     noBtn.style.left = Math.random()*maxX + "px";
     noBtn.style.top  = Math.random()*maxY + "px";
+  });
+
+  noBtn.addEventListener("click",()=>{
+    noBtn.innerText="You can't say NO 😝";
   });
 }
 
@@ -226,10 +231,11 @@ function yesClick(){
   card.innerHTML=`
    <img src="teddy-happy.gif" width="180"><br>
    <div style="font-family:Pacifico,cursive;font-size:30px;color:#ff2f68">
-     I Love You So Much Muskan 💖😭
+     I Love You So Much Kutty 💖😭
    </div>
-   <p>You just made my whole world brighter ❤️</p>
-   <p>Always stay with me, okay? 💫</p>`;
+   <p>You are not just someone I like… you are my safe place 🤍</p>
+   <p>No matter what happens, my heart will always choose you 🫶</p>
+   <p>I know you will never leave me… 🤍✨</p>`;
  },1200);
 }
 
@@ -258,3 +264,11 @@ setInterval(()=>{
 
 </body>
 </html>
+
+
+
+
+
+
+
+
